@@ -110,6 +110,7 @@ switch:
     ble_client_id: ble_tesla_id
     name: "BLE Connection"
     entity_category: diagnostic
+    disabled_by_default: true
 
 number:
   - platform: template
