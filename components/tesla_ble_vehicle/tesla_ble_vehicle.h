@@ -21,7 +21,7 @@
 #include "custom_binary_sensor.h"
 
 namespace TeslaBLE {
-class Client;
+class Authenticator;
 }
 
 typedef enum BLE_CarServer_VehicleAction_E {
@@ -201,7 +201,7 @@ protected:
   std::queue<BLETXChunk> ble_write_queue_;
   std::queue<BLECommand> command_queue_;
 
-  TeslaBLE::Client *tesla_ble_client_;
+  TeslaBLE::Authenticator *tesla_ble_client_;
   uint32_t storage_handle_;
   uint16_t handle_;
   uint16_t read_handle_{0};

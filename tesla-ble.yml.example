@@ -27,7 +27,7 @@ esphome:
   name: ${name}
   friendly_name: ${friendly_name}
   libraries:
-    - https://github.com/snuffy2/tesla-ble.git#main
+    - https://github.com/pmdroid/tesla-vehicle-command.git#main
 
 api:
   encryption:

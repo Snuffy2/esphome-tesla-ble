@@ -7,8 +7,8 @@
 #include <nvs_flash.h>
 #include <pb_decode.h>
 
+#include <authenticator.h>
 #include <car_server.pb.h>
-#include <client.h>
 #include <errors.h>
 #include <keys.pb.h>
 #include <peer.h>
@@ -25,7 +25,8 @@ void TeslaBLEVehicle::dump_config() {
   ESP_LOGCONFIG(TAG, "Tesla BLE Vehicle:");
   LOG_BINARY_SENSOR("  ", "Asleep Sensor", this->isAsleepSensor);
 }
-TeslaBLEVehicle::TeslaBLEVehicle() : tesla_ble_client_(new TeslaBLE::Client{}) {
+TeslaBLEVehicle::TeslaBLEVehicle()
+    : tesla_ble_client_(new TeslaBLE::Authenticator{}) {
   ESP_LOGCONFIG(TAG, "Constructing Tesla BLE Vehicle component");
 }
 
