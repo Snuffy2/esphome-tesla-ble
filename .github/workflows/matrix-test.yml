@@ -1,4 +1,4 @@
-name: Release Process
+name: Matrix Test
 on:
   pull_request:
   push:
@@ -6,18 +6,6 @@ on:
 
 
 jobs:
-  debug:
-    name: Debug info
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
-      - name: Debug Variables
-        run: |
-            echo "github.event_name: ${{ github.event_name }}"
-            echo "github.ref_name: ${{ github.ref_name }}"
-            echo "github.event.repository.default_branch: ${{ github.event.repository.default_branch }}"
-
   build-matrix-list:
     name: Build Matrix File List
     runs-on: ubuntu-latest
@@ -29,11 +17,11 @@ jobs:
       - name: Set Matrix Variable
         id: set-matrix
         run: |
-          matrix=$(find . -maxdepth 1 -type f -name 'tesla-ble-*.yml' -print | jq -R -s -c 'split("\n")[:-1] | join("\n")')
-          echo "$matrix"
+          matrix=$(find . -maxdepth 1 -type f -name 'tesla-ble-*.yml' -print | jq -R -s -r 'split("\n")[:-1] | join("\n")')
+          echo "${matrix}"
           echo -e "matrix<<EOF\n$matrix\nEOF" >> "$GITHUB_OUTPUT"
 
-  build:
+  test-matrix-list:
     name: Test Matrix
     runs-on: ubuntu-latest
     needs: build-matrix-list
@@ -42,3 +30,22 @@ jobs:
         uses: actions/checkout@v4.2.2
       - name: List all files
         run: echo ${{ needs.build-matrix-list.outputs.matrix }}
+
+  build:
+    name: Build Manifest & Compile Firmwares
+    uses: esphome/workflows/.github/workflows/build.yml@main
+    needs: build-matrix-list
+    with:
+      # Filenames of the config, newline separated (required):
+      files: |
+        ${{ needs.build-matrix-list.outputs.matrix }}
+      # Version of ESPHome to build with (default: latest)
+      # esphome-version: latest
+      # Summary of the release
+      # release-summary:
+      # URL to the release notes
+      # release-url:
+      # Version of the release
+      # release-version: latest
+      # Combine all files into a single manifest under this name
+      combined-name: tesla-ble
