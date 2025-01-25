@@ -55,9 +55,9 @@ jobs:
       - name: Set Matrix Variable
         id: set-matrix
         run: |
-          matrix=$(find . -maxdepth 1 -type f -name 'tesla-ble-*.yml' -print | jq -R -s -c 'split("\n")[:-1] | join("\n")' | sed 's/^/|\n/')
+          matrix=$(find . -maxdepth 1 -type f -name 'tesla-ble-*.yml' -print | jq -R -s -c 'split("\n")[:-1] | join("\n")')
           echo "$matrix"
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo -e "matrix<<EOF\n$matrix\nEOF" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build Manifest & Compile Firmwares
@@ -65,7 +65,7 @@ jobs:
     needs: build-matrix-list
     with:
       # Filenames of the config, newline separated (required):
-      files: ${{ fromJson(needs.build-matrix-list.outputs.matrix) }}
+      files: ${{ needs.build-matrix-list.outputs.matrix }}
       # Version of ESPHome to build with (default: latest)
       # esphome-version: latest
       # Summary of the release
