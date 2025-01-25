@@ -5,16 +5,30 @@ on:
   workflow_dispatch:
 
 jobs:
+  build-matrix-list:
+    name: Build Matrix File List
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+      - name: Set Matrix Variable
+        id: set-matrix
+        run: |
+          matrix=$(find . -maxdepth 1 -type f -name 'tesla-ble-*.yml' -print | jq -R -s -c 'split("\n")[:-1]')
+          echo "$matrix"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+
   ci:
     name: Checking ${{ matrix.file }}
+    needs: build-matrix-list
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        file:
-          - tesla-ble-esp32-generic.yml
-          - tesla-ble-m5stack-atoms3.yml
-          - tesla-ble-m5stack-nanoc6.yml
+        file: ${{ fromJson(needs.build-matrix-list.outputs.matrix) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
