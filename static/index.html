@@ -32,58 +32,7 @@
       type="module"
       src="https://unpkg.com/esp-web-tools@9/dist/web/install-button.js?module"
     ></script>
-    <script>
-        function makeSelector(){
-            fetch('https://snuffy2.github.io/esphome-tesla-ble/manifests.json')
-            .then(response => response.json())
-            .then(data => make_select(data));
 
-        }
-
-        function make_select(data){
-            var sel=document.querySelector("#pick-variant-selector");
-            // console.log(data);
-            for (opt_group in data){
-                var og=document.createElement('optgroup');
-                og.label = opt_group;
-                sel.appendChild(og);
-                console.log(opt_group,data[opt_group]);
-                for (fw of data[opt_group]){
-                    var opt=document.createElement('option');
-                    opt.label = fw['name'];
-                    opt.value = fw['path'];
-                    console.log( opt.value);
-                    og.appendChild(opt);
-                }
-            }
-        }
-
-        window.addEventListener("load", function(event) {
-            makeSelector();
-            try{
-                const button = document.querySelector("esp-web-install-button");
-                button.overrides = {
-                  checkSameFirmware(manifest, improvInfo) {
-                    const manifestFirmware = manifest.name.toLowerCase();
-                    const deviceFirmware = improvInfo.firmware.toLowerCase();
-                    return manifestFirmware.includes(deviceFirmware);
-                  }
-                };
-                console.log(button.shadowRoot.firstChild.name);
-                if(button.shadowRoot.firstChild.name == 'activate'){
-                    const selectEl = document.querySelector("#pick-variant-selector");
-                    button.manifest = "https://snuffy2.github.io/esphome-tesla-ble/manifest.json";
-                    selectEl.addEventListener("change", () => {
-                        button.manifest = selectEl.value;
-                        console.log(button.manifest);
-                    });
-                }
-            }
-            catch(e){
-                console.log(e);
-            }
-        },{ once: true });
-        </script>
   </head>
   <body>
     <div style='display:inline-block;color:#eaeaea;min-width:340px;'>
@@ -93,15 +42,13 @@
     <div class='pick-variant'>
     <ol style='text-align:left'>
         <li>Connect the ESP device to your computer</br>using USB or serial-to-USB adapter</li></br>
-        <li>Select the firmware variant suitable for</br>your device</li></br>
         <li>Hit "Install" and select the correct port</br>or find help if no device found</li>
         </ol>
         </br>
       </br>
-      <select id="pick-variant-selector"></select>
       <p>
         </br>
-        <esp-web-install-button id="inst" style='text-align:center'>
+        <esp-web-install-button manifest="./manifest.json" id="inst" style='text-align:center'>
           <i slot="unsupported">
             Your browser does not support Web Serial.</br>Open this page in Google Chrome or</br>Microsoft Edge instead
             <span class="not-supported-i hidden">(but not on your mobile device)</span>.
