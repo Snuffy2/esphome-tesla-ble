@@ -1,0 +1,1 @@
+<<: !include static/tesla-ble-esp32s3-generic.yml
