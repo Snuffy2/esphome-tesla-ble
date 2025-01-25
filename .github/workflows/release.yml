@@ -9,7 +9,7 @@ jobs:
     name: Debug info
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4.2.2
       - name: Debug Variables
         run: |
@@ -24,7 +24,7 @@ jobs:
     name: Update Version
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4.2.2
       - name: Update Version in YAML files
         if: ${{ github.event_name == 'release' && github.event.release.draft == false }}
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout source code
+      - name: Checkout repository
         uses: actions/checkout@v4.2.2
       - name: Download built firmwares
         uses: actions/download-artifact@v4.1.8
