@@ -52,6 +52,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Fetch and Reset to Latest Changes (release)
+        if: ${{ github.event_name == 'release' && github.event.release.draft == false }}
+        run: |
+          git fetch origin ${{ github.event.release.target_commitish }}
+          git reset --hard origin/${{ github.event.release.target_commitish }}
+      - name: Fetch and Reset to Latest Changes (workflow_dispatch)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          git fetch origin ${{ github.ref_name }}
+          git reset --hard origin/${{ github.ref_name }}
       - name: Set Matrix Variable
         id: set-matrix
         run: |
@@ -85,6 +97,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
       - name: Download built firmwares
         uses: actions/download-artifact@v4.1.8
         with:
