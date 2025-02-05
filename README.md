@@ -1,5 +1,7 @@
 # ESPHome Tesla BLE
 
+### [Web Installer](https://snuffy2.github.io/esphome-tesla-ble/)
+
 Forked from [yoziru/tesla-ble](https://github.com/yoziru/esphome-tesla-ble) 
 
 This project lets you use an ESP32 device to manage charging a Tesla vehicle over BLE, using the [tesla-ble](http://github.com/Snuffy2/tesla-ble) forked from [yoziru](http://github.com/yoziru/tesla-ble) library.
