@@ -19,7 +19,7 @@ ota:
   - platform: esphome
 
 logger:
-  level: INFO
+  level: DEBUG
 
 captive_portal:
 
